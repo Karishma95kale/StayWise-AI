@@ -1,0 +1,120 @@
+<%- include('../listing/partials/header') -%>
+
+<div class="container my-5">
+  <!-- Owner Header Banner -->
+  <div class="startup-card p-4 mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="rounded-circle p-3 text-white fs-2" style="background: var(--navy-gradient);">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <div>
+          <h2 class="fw-bold mb-1 text-navy">Owner Dashboard: <%= currentUser ? currentUser.username : 'Manager' %></h2>
+          <p class="text-muted small mb-0">Manage student hostels, room bookings, and earnings analytics</p>
+        </div>
+      </div>
+      <a href="/listings/new" class="btn btn-pink-gradient px-4 py-2 fw-bold shadow">
+        <i class="fa-solid fa-plus me-1"></i> Register New Hostel
+      </a>
+    </div>
+  </div>
+
+  <!-- Analytics Counter Grid -->
+  <div class="row g-3 mb-4 text-center">
+    <div class="col-6 col-md-3">
+      <div class="startup-card p-3">
+        <div class="text-muted text-xs text-uppercase fw-semibold mb-1">Properties Listed</div>
+        <div class="fs-2 fw-bold text-navy"><%= stats.totalProperties %></div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="startup-card p-3">
+        <div class="text-muted text-xs text-uppercase fw-semibold mb-1">Available Beds</div>
+        <div class="fs-2 fw-bold text-warning"><%= stats.availableBeds %></div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="startup-card p-3">
+        <div class="text-muted text-xs text-uppercase fw-semibold mb-1">Booking Requests</div>
+        <div class="fs-2 fw-bold text-pink" style="color: var(--primary-pink);"><%= stats.totalBookings %></div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="startup-card p-3">
+        <div class="text-muted text-xs text-uppercase fw-semibold mb-1">Estimated Revenue</div>
+        <div class="fs-2 fw-bold text-success">₹<%= stats.totalRevenue.toLocaleString('en-IN') %></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Booking Requests & Approvals -->
+    <div class="col-lg-7">
+      <div class="startup-card p-4 mb-4">
+        <h4 class="fw-bold mb-3"><i class="fa-solid fa-inbox me-2 text-pink" style="color: var(--primary-pink);"></i> Student Booking Requests</h4>
+        <% if(bookingRequests.length === 0){ %>
+          <p class="text-muted small mb-0">No booking requests submitted yet.</p>
+        <% } else { %>
+          <div class="d-flex flex-column gap-3">
+            <% for(let reqItem of bookingRequests){ %>
+              <div class="p-3 bg-light rounded-4 border d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                  <div class="fw-bold text-navy"><%= reqItem.hostel ? reqItem.hostel.title : 'Hostel' %></div>
+                  <div class="text-muted text-xs">
+                    Student: <strong><%= reqItem.student ? reqItem.student.username : 'Student' %></strong> &bull;
+                    Move-In: <%= new Date(reqItem.moveInDate).toLocaleDateString('en-IN') %>
+                  </div>
+                  <div class="text-muted text-xs">Total: <strong class="text-success">₹<%= reqItem.totalAmount.toLocaleString('en-IN') %></strong></div>
+                </div>
+
+                <div class="d-flex gap-2 align-items-center">
+                  <% if(reqItem.status === 'pending'){ %>
+                    <form method="POST" action="/bookings/<%= reqItem._id %>/status">
+                      <input type="hidden" name="status" value="confirmed">
+                      <button class="btn btn-success btn-sm px-3"><i class="fa-solid fa-check me-1"></i> Confirm</button>
+                    </form>
+                    <form method="POST" action="/bookings/<%= reqItem._id %>/status">
+                      <input type="hidden" name="status" value="cancelled">
+                      <button class="btn btn-outline-danger btn-sm px-3">Decline</button>
+                    </form>
+                  <% } else { %>
+                    <span class="badge <%= reqItem.status === 'confirmed' ? 'bg-success' : 'bg-danger' %> px-3 py-2">
+                      <%= reqItem.status.toUpperCase() %>
+                    </span>
+                  <% } %>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- My Managed Properties -->
+    <div class="col-lg-5">
+      <div class="startup-card p-4">
+        <h4 class="fw-bold mb-3"><i class="fa-solid fa-building me-2 text-navy"></i> My Accommodations</h4>
+        <% if(myHostels.length === 0){ %>
+          <p class="text-muted small mb-0">No hostels listed yet.</p>
+        <% } else { %>
+          <div class="d-flex flex-column gap-3">
+            <% for(let h of myHostels){ %>
+              <div class="p-3 bg-light rounded-4 border d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="fw-bold text-navy text-truncate" style="max-width: 180px;"><%= h.title %></div>
+                  <div class="text-muted text-xs">₹<%= h.price.toLocaleString('en-IN') %>/mo &bull; <%= h.availableBeds %> Beds Left</div>
+                </div>
+                <div class="d-flex gap-2">
+                  <a href="/listings/<%= h._id %>/edit" class="btn btn-outline-navy btn-sm"><i class="fa-solid fa-pen"></i></a>
+                  <a href="/listings/<%= h._id %>" class="btn btn-pink-gradient btn-sm"><i class="fa-solid fa-eye"></i></a>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../includes/footer") %>

@@ -1,0 +1,285 @@
+<%- include('../listing/partials/header') -%>
+
+<div class="container my-5">
+  <!-- AI Header Banner -->
+  <div class="startup-card p-4 p-md-5 mb-4 text-center text-white position-relative overflow-hidden" style="background: var(--navy-gradient);">
+    <div class="rounded-circle p-3 d-inline-flex mb-3 text-pink fs-1" style="background: rgba(233, 30, 99, 0.15); color: var(--primary-pink);">
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </div>
+    <h1 class="fw-bold display-6 text-white mb-2">StayWise AI Innovation Suite</h1>
+    <p class="text-light opacity-75 leading-relaxed" style="max-width: 620px; margin: 0 auto;">
+      Powered by Google Gemini API. Get instant answers to accommodation queries, compute monthly cost of living, match potential roommates, or generate hostel marketing copy.
+    </p>
+
+    <!-- Nav Tabs -->
+    <ul class="nav nav-pills justify-content-center gap-2 mt-4" id="aiTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active btn-navy rounded-pill px-4" id="chat-tab" data-bs-toggle="tab" data-bs-target="#chat-pane" type="button" role="tab">
+          <i class="fa-solid fa-robot me-1 text-pink" style="color: var(--primary-pink);"></i> AI Chatbot
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link btn-navy rounded-pill px-4" id="budget-tab" data-bs-toggle="tab" data-bs-target="#budget-pane" type="button" role="tab">
+          <i class="fa-solid fa-calculator me-1 text-success"></i> Budget Planner
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link btn-navy rounded-pill px-4" id="roommate-tab" data-bs-toggle="tab" data-bs-target="#roommate-pane" type="button" role="tab">
+          <i class="fa-solid fa-users-viewfinder me-1 text-info"></i> Roommate Matcher
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link btn-navy rounded-pill px-4" id="generator-tab" data-bs-toggle="tab" data-bs-target="#generator-pane" type="button" role="tab">
+          <i class="fa-solid fa-pen-nib me-1 text-warning"></i> Copy Generator
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="tab-content" id="aiTabContent">
+    <!-- 1. AI Concierge Chatbot -->
+    <div class="tab-pane fade show active" id="chat-pane" role="tabpanel">
+      <div class="row justify-content-center">
+        <div class="col-lg-9">
+          <div class="startup-card p-4">
+            <h4 class="fw-bold mb-3 text-navy"><i class="fa-solid fa-comments me-2 text-pink" style="color: var(--primary-pink);"></i> AI Student Accommodation Assistant</h4>
+            
+            <div id="chatMessages" class="p-3 bg-light rounded-4 border mb-3 overflow-y-auto" style="height: 380px;">
+              <div class="d-flex align-items-start gap-2 mb-3">
+                <div class="rounded-circle p-2 text-white fs-6" style="background: var(--secondary-navy); width: 34px; height: 34px; text-center;">
+                  <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="p-3 bg-white border rounded-4 text-dark small" style="max-width: 85%;">
+                  Hello! I'm your StayWise AI Student Concierge. Ask me anything about student hostels, rent budgets, mess food, safety scores, or campus transit!
+                </div>
+              </div>
+            </div>
+
+            <form id="chatForm" onsubmit="sendChatMessage(event)">
+              <div class="input-group">
+                <input type="text" id="chatInput" class="form-control bg-light border-end-0 py-3" placeholder="Type your question (e.g. What is the average rent for a girls PG near DU North Campus?)" required>
+                <button class="btn btn-pink-gradient px-4" type="submit" id="chatSendBtn">
+                  <i class="fa-solid fa-paper-plane me-1"></i> Ask AI
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. AI Budget Planner -->
+    <div class="tab-pane fade" id="budget-pane" role="tabpanel">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="startup-card p-4">
+            <h4 class="fw-bold mb-3 text-navy"><i class="fa-solid fa-calculator me-2 text-success"></i> Monthly Living Cost Planner</h4>
+            <form onsubmit="calculateBudget(event)" class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label text-muted small fw-semibold">Monthly Rent (₹)</label>
+                <input type="number" id="bRent" class="form-control bg-light" value="9500" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-muted small fw-semibold">Mess / Food Expenses (₹)</label>
+                <input type="number" id="bMess" class="form-control bg-light" value="2500" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-muted small fw-semibold">Campus Transit / Transport (₹)</label>
+                <input type="number" id="bTransport" class="form-control bg-light" value="1200" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-muted small fw-semibold">Personal & Utilities (₹)</label>
+                <input type="number" id="bPersonal" class="form-control bg-light" value="2500" required>
+              </div>
+              <div class="col-12">
+                <button class="btn btn-pink-gradient w-100 py-3 fw-bold" type="submit">Calculate Budget & Get AI Saving Tips</button>
+              </div>
+            </form>
+
+            <div id="budgetResult" class="mt-4 p-4 bg-light rounded-4 border" style="display: none;">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0 text-navy">Total Estimated Cost</h5>
+                <span id="bTotal" class="fs-2 fw-bold text-success">₹15,700/mo</span>
+              </div>
+              <h6 class="fw-bold text-warning mb-2"><i class="fa-solid fa-lightbulb me-1"></i> AI Saving Insights</h6>
+              <div id="bAdvice" class="small text-muted leading-relaxed"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. AI Roommate Matchmaker -->
+    <div class="tab-pane fade" id="roommate-pane" role="tabpanel">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="startup-card p-4">
+            <h4 class="fw-bold mb-3 text-navy"><i class="fa-solid fa-users-viewfinder me-2 text-info"></i> Roommate Compatibility Evaluator</h4>
+            <form onsubmit="matchRoommate(event)" class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label text-muted small fw-semibold">Sleep Schedule</label>
+                <select id="rSleep" class="form-select bg-light">
+                  <option value="Early Riser (10 PM - 6 AM)">Early Riser (10 PM - 6 AM)</option>
+                  <option value="Night Owl (2 AM - 10 AM)">Night Owl (2 AM - 10 AM)</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-muted small fw-semibold">Study Habit</label>
+                <select id="rStudy" class="form-select bg-light">
+                  <option value="Silent Desk Study">Silent Desk Study</option>
+                  <option value="Group / Music Study">Group / Music Study</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-muted small fw-semibold">Cleanliness Standard</label>
+                <select id="rClean" class="form-select bg-light">
+                  <option value="Strictly Meticulous">Strictly Meticulous</option>
+                  <option value="Moderate Cleanliness">Moderate Cleanliness</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-muted small fw-semibold">Noise Tolerance</label>
+                <select id="rNoise" class="form-select bg-light">
+                  <option value="Low Noise">Quiet Atmosphere</option>
+                  <option value="Medium Noise">Headphones Allowed</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <button class="btn btn-pink-gradient w-100 py-3 fw-bold" type="submit">Evaluate Roommate Compatibility</button>
+              </div>
+            </form>
+
+            <div id="roommateResult" class="mt-4 p-4 bg-light rounded-4 border text-center" style="display: none;">
+              <div class="badge-pink fs-5 mb-2 d-inline-block p-2 px-4 shadow-sm" id="rScore">92% Match Score</div>
+              <p id="rReasons" class="small text-muted leading-relaxed mt-2 mb-0"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. AI Description Generator -->
+    <div class="tab-pane fade" id="generator-pane" role="tabpanel">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="startup-card p-4">
+            <h4 class="fw-bold mb-3 text-navy"><i class="fa-solid fa-pen-nib me-2 text-warning"></i> Hostel Description Copywriter</h4>
+            <form onsubmit="generateDescription(event)" class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label text-muted small fw-semibold">Hostel Name</label>
+                <input type="text" id="gTitle" class="form-control bg-light" placeholder="e.g. St. Stephen's PG" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-muted small fw-semibold">College & City</label>
+                <input type="text" id="gCollege" class="form-control bg-light" placeholder="DU North Campus, Delhi" required>
+              </div>
+              <div class="col-12">
+                <button class="btn btn-pink-gradient w-100 py-3 fw-bold" type="submit">Generate AI Marketing Description</button>
+              </div>
+            </form>
+
+            <div id="genResult" class="mt-4 p-4 bg-light rounded-4 border" style="display: none;">
+              <h6 class="fw-bold text-navy mb-2"><i class="fa-solid fa-check-circle me-1 text-success"></i> Generated Description Copy</h6>
+              <div id="genText" class="small text-muted leading-relaxed"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function sendChatMessage(e) {
+    e.preventDefault();
+    const input = document.getElementById('chatInput');
+    const box = document.getElementById('chatMessages');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    box.innerHTML += `
+      <div class="d-flex align-items-start gap-2 mb-3 justify-content-end">
+        <div class="p-3 bg-pink text-white rounded-4 small" style="max-width: 85%; background: var(--primary-pink);">
+          ${msg}
+        </div>
+      </div>
+    `;
+    input.value = '';
+    box.scrollTop = box.scrollHeight;
+
+    const res = await fetch('/ai/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg })
+    });
+    const data = await res.json();
+
+    box.innerHTML += `
+      <div class="d-flex align-items-start gap-2 mb-3">
+        <div class="rounded-circle p-2 text-white fs-6" style="background: var(--secondary-navy); width: 34px; height: 34px; text-center;">
+          <i class="fa-solid fa-robot"></i>
+        </div>
+        <div class="p-3 bg-white border rounded-4 text-dark small" style="max-width: 85%;">
+          ${data.reply}
+        </div>
+      </div>
+    `;
+    box.scrollTop = box.scrollHeight;
+  }
+
+  async function calculateBudget(e) {
+    e.preventDefault();
+    const rent = document.getElementById('bRent').value;
+    const mess = document.getElementById('bMess').value;
+    const transport = document.getElementById('bTransport').value;
+    const personal = document.getElementById('bPersonal').value;
+
+    const res = await fetch('/ai/budget', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rent, mess, transport, personal })
+    });
+    const data = await res.json();
+
+    document.getElementById('bTotal').innerText = `₹${data.total.toLocaleString('en-IN')}/mo`;
+    document.getElementById('bAdvice').innerHTML = data.advice;
+    document.getElementById('budgetResult').style.display = 'block';
+  }
+
+  async function matchRoommate(e) {
+    e.preventDefault();
+    const sleepHabits = document.getElementById('rSleep').value;
+    const studyHabits = document.getElementById('rStudy').value;
+    const cleanliness = document.getElementById('rClean').value;
+    const noiseTolerance = document.getElementById('rNoise').value;
+
+    const res = await fetch('/ai/match-roommate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sleepHabits, studyHabits, cleanliness, noiseTolerance })
+    });
+    const data = await res.json();
+
+    document.getElementById('rScore').innerText = `${data.matchScore}% Match Score`;
+    document.getElementById('rReasons').innerText = data.reasons;
+    document.getElementById('roommateResult').style.display = 'block';
+  }
+
+  async function generateDescription(e) {
+    e.preventDefault();
+    const title = document.getElementById('gTitle').value;
+    const college = document.getElementById('gCollege').value;
+
+    const res = await fetch('/ai/generate-description', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, college })
+    });
+    const data = await res.json();
+
+    document.getElementById('genText').innerText = data.description;
+    document.getElementById('genResult').style.display = 'block';
+  }
+</script>
+
+<%- include("../includes/footer") %>

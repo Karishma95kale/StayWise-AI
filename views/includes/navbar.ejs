@@ -1,0 +1,73 @@
+<nav class="navbar navbar-expand-xl transparent-nav sticky-top py-3">
+  <div class="container">
+    <!-- Brand Logo -->
+    <a class="navbar-brand d-flex align-items-center gap-2" href="/listings">
+      <div class="rounded-circle p-2 d-flex align-items-center justify-content-center text-white" style="width: 42px; height: 42px; background: var(--accent-pink-gradient);">
+        <i class="fa-solid fa-graduation-cap fs-5"></i>
+      </div>
+      <span class="brand-title">StayWise<span>.AI</span></span>
+    </a>
+
+    <!-- Mobile Toggler -->
+    <button class="navbar-toggler border-0 text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#staywiseNav" aria-controls="staywiseNav" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa-solid fa-bars-staggered fs-3 text-navy"></i>
+    </button>
+
+    <div class="collapse navbar-collapse" id="staywiseNav">
+      <!-- Navigation Links -->
+      <ul class="navbar-nav mx-auto align-items-xl-center gap-1 my-2 my-xl-0">
+        <li class="nav-item">
+          <a class="nav-link nav-link-custom" href="/listings"><i class="fa-solid fa-house text-pink me-1" style="color: var(--primary-pink);"></i> Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-link-custom" href="/listings">Properties</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-link-custom" href="/listings?roomType=Single">Hostels</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-link-custom" href="/listings?roomType=PG">PG</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-link-custom" href="/ai/assistant"><i class="fa-solid fa-sparkles me-1" style="color: var(--primary-pink);"></i> AI Tools</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-link-custom" href="/compare">Compare</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-link-custom" href="/listings/new">For Owners</a>
+        </li>
+      </ul>
+
+      <!-- Right Action CTAs -->
+      <div class="d-flex align-items-center gap-2">
+        <% if(typeof curruser !== 'undefined' && curruser){ %>
+          <a class="btn btn-outline-navy px-3 me-1" href="/dashboard/<%= curruser.role %>">
+            <i class="fa-solid fa-gauge me-1"></i> Dashboard
+          </a>
+
+          <!-- User Menu Dropdown -->
+          <div class="dropdown">
+            <a class="btn btn-navy dropdown-toggle px-3 d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-circle-user fs-5"></i>
+              <span><%= curruser.username %></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end startup-card p-2 border-0 mt-2 shadow-lg">
+              <li><span class="dropdown-header text-muted text-uppercase small">Signed in as <strong><%= curruser.role %></strong></span></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item rounded-3 py-2 fw-semibold" href="/dashboard/<%= curruser.role %>"><i class="fa-solid fa-gauge me-2 text-navy"></i> My Dashboard</a></li>
+              <li><a class="dropdown-item rounded-3 py-2 fw-semibold text-danger" href="/logout"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a></li>
+            </ul>
+          </div>
+        <% } else { %>
+          <a class="nav-link nav-link-custom me-1" href="/login">Login</a>
+          <a class="btn btn-navy me-2" href="/signup">Register</a>
+        <% } %>
+
+        <a href="/ai/assistant" class="btn btn-pink-gradient text-nowrap d-none d-sm-inline-block">
+          Enquire Now <i class="fa-solid fa-arrow-right ms-1"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,15 @@
+<%- include('listing/partials/header') -%>
+<div class="container mt-5">
+  <div class="row">
+    <div class="alert alert-danger col-6 offset-3 text-center" role="alert">
+      <h4 class="alert-heading">Validation Error</h4>
+      <p><%= message %></p>
+      <hr>
+      <a href="/listings/new" class="btn btn-outline-dark">Back to Create Listing</a>
+    </div>
+  </div>
+</div>
+
+<%- include('includes/footer') -%>
+
+

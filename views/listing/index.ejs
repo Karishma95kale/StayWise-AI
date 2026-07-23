@@ -1,0 +1,485 @@
+<%- include('./partials/header') -%>
+
+<!-- 1. Hero Section -->
+<section class="position-relative py-5 overflow-hidden" style="background: linear-gradient(180deg, rgba(248, 249, 252, 0.6) 0%, rgba(20, 33, 61, 0.05) 100%);">
+  <div class="container py-4">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7 animate-slide-up">
+        <span class="badge-pink mb-3 d-inline-block shadow-sm">
+          <i class="fa-solid fa-sparkles me-1"></i> #1 AI Student Accommodation Platform
+        </span>
+        <h1 class="display-hero mb-3">
+          Find Your Perfect <br>
+          <span style="background: var(--accent-pink-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Student Home</span>
+        </h1>
+        <p class="fs-5 text-muted mb-4 leading-relaxed" style="max-width: 580px;">
+          AI-Powered Hostel, PG & Student Living Platform. Discover verified accommodations near top universities with zero brokerage and AI safety metrics.
+        </p>
+
+        <div class="d-flex flex-wrap gap-3">
+          <a href="#properties" class="btn btn-pink-gradient btn-lg">
+            Explore Properties <i class="fa-solid fa-arrow-down ms-1"></i>
+          </a>
+          <a href="/ai/assistant" class="btn btn-navy btn-lg">
+            <i class="fa-solid fa-robot me-2" style="color: var(--primary-pink);"></i> Try AI Recommendation
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-5 animate-fade-in">
+        <div class="position-relative">
+          <div class="startup-card p-2 shadow-lg">
+            <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=1000&q=80" class="img-fluid rounded-4" alt="Student Lifestyle">
+          </div>
+          <!-- Floating Badge -->
+          <div class="position-absolute bottom-0 start-0 translate-middle-y bg-white p-3 rounded-4 shadow-lg border d-flex align-items-center gap-3 ms-n3 mb-n3" style="max-width: 260px;">
+            <div class="rounded-circle p-2 bg-success bg-opacity-10 text-success fs-3">
+              <i class="fa-solid fa-shield-check"></i>
+            </div>
+            <div>
+              <div class="fw-bold text-dark small">100% Verified Hostels</div>
+              <div class="text-muted text-xs">Biometric & 24/7 Guards</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Floating Search Bar -->
+    <div class="floating-search-box animate-slide-up">
+      <form action="/listings" method="GET">
+        <div class="row g-3 align-items-center">
+          <div class="col-lg-3 col-md-6 search-field-group">
+            <label class="text-muted text-xs font-weight-bold text-uppercase d-block mb-1"><i class="fa-solid fa-location-dot me-1 text-pink" style="color: var(--primary-pink);"></i> Location / City</label>
+            <input type="text" name="search" class="form-control search-input-custom ps-0" placeholder="e.g. GTB Nagar, Pune..." value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+          </div>
+
+          <div class="col-lg-3 col-md-6 search-field-group">
+            <label class="text-muted text-xs font-weight-bold text-uppercase d-block mb-1"><i class="fa-solid fa-graduation-cap me-1 text-navy"></i> Nearby College</label>
+            <input type="text" name="college" class="form-control search-input-custom ps-0" placeholder="e.g. DU, IIT, Symbiosis..." value="<%= queryFilters && queryFilters.college ? queryFilters.college : '' %>">
+          </div>
+
+          <div class="col-lg-2 col-md-4 search-field-group">
+            <label class="text-muted text-xs font-weight-bold text-uppercase d-block mb-1"><i class="fa-solid fa-wallet me-1 text-success"></i> Max Budget</label>
+            <input type="number" name="maxPrice" class="form-control search-input-custom ps-0" placeholder="₹12,000" value="<%= queryFilters && queryFilters.maxPrice ? queryFilters.maxPrice : '' %>">
+          </div>
+
+          <div class="col-lg-2 col-md-4 search-field-group">
+            <label class="text-muted text-xs font-weight-bold text-uppercase d-block mb-1"><i class="fa-solid fa-user-group me-1 text-info"></i> Gender</label>
+            <select name="gender" class="form-select search-input-custom ps-0">
+              <option value="All">All Types</option>
+              <option value="Boys" <%= queryFilters && queryFilters.gender === 'Boys' ? 'selected' : '' %>>Boys</option>
+              <option value="Girls" <%= queryFilters && queryFilters.gender === 'Girls' ? 'selected' : '' %>>Girls</option>
+              <option value="Co-ed" <%= queryFilters && queryFilters.gender === 'Co-ed' ? 'selected' : '' %>>Co-ed</option>
+            </select>
+          </div>
+
+          <div class="col-lg-2 col-md-4">
+            <button type="submit" class="btn btn-pink-gradient w-100 py-3 rounded-pill fw-bold">
+              <i class="fa-solid fa-magnifying-glass me-1"></i> Search
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Popular Cities Section -->
+<section class="py-5 bg-white">
+  <div class="container py-3">
+    <div class="text-center mb-5">
+      <span class="badge-navy mb-2 d-inline-block">Top Student Hubs</span>
+      <h2 class="section-heading">Explore Popular College Cities</h2>
+      <p class="text-muted">Find verified student housing near India's top academic hubs</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <a href="/listings?search=Delhi" class="text-decoration-none">
+          <div class="city-card">
+            <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=800&q=80" alt="Delhi">
+            <div class="city-overlay">
+              <h3 class="fw-bold text-white mb-1">Delhi NCR</h3>
+              <p class="text-light small mb-0"><i class="fa-solid fa-graduation-cap me-1"></i> DU North Campus, IIT Delhi, Jamia</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <a href="/listings?search=Mumbai" class="text-decoration-none">
+          <div class="city-card">
+            <img src="https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80" alt="Mumbai">
+            <div class="city-overlay">
+              <h3 class="fw-bold text-white mb-1">Mumbai</h3>
+              <p class="text-light small mb-0"><i class="fa-solid fa-graduation-cap me-1"></i> IIT Bombay, NMIMS, St. Xavier's</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <a href="/listings?search=Bengaluru" class="text-decoration-none">
+          <div class="city-card">
+            <img src="https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&w=800&q=80" alt="Bangalore">
+            <div class="city-overlay">
+              <h3 class="fw-bold text-white mb-1">Bangalore</h3>
+              <p class="text-light small mb-0"><i class="fa-solid fa-graduation-cap me-1"></i> Christ University, IISc, Koramangala</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-lg-6 col-md-6">
+        <a href="/listings?search=Pune" class="text-decoration-none">
+          <div class="city-card" style="height: 240px;">
+            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80" alt="Pune">
+            <div class="city-overlay">
+              <h3 class="fw-bold text-white mb-1">Pune</h3>
+              <p class="text-light small mb-0"><i class="fa-solid fa-graduation-cap me-1"></i> Symbiosis, Fergusson, Viman Nagar</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <a href="/listings?search=Hyderabad" class="text-decoration-none">
+          <div class="city-card" style="height: 240px;">
+            <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80" alt="Hyderabad">
+            <div class="city-overlay">
+              <h3 class="fw-bold text-white mb-1">Hyderabad</h3>
+              <p class="text-light small mb-0"><i class="fa-solid fa-graduation-cap me-1"></i> HCU, Osmania, Gachibowli Tech Hub</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Featured Properties Section -->
+<section id="properties" class="py-5">
+  <div class="container py-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-3">
+      <div>
+        <span class="badge-pink mb-2 d-inline-block">Curated Residences</span>
+        <h2 class="section-heading mb-0">Featured Student Accommodations</h2>
+      </div>
+
+      <a href="/listings" class="btn btn-outline-navy">View All Properties &rarr;</a>
+    </div>
+
+    <!-- Accommodations Grid -->
+    <% if(allListings.length === 0){ %>
+      <div class="startup-card p-5 text-center my-4">
+        <i class="fa-solid fa-building-circle-xmark display-3 text-muted mb-3"></i>
+        <h3 class="fw-bold">No Properties Found</h3>
+        <p class="text-muted">Try resetting your search parameters.</p>
+        <a href="/listings" class="btn btn-pink-gradient px-4 mt-2">Reset Filters</a>
+      </div>
+    <% } else { %>
+      <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4">
+        <% for(let hostel of allListings){ %>
+          <div class="col">
+            <div class="startup-card h-100 position-relative">
+              <!-- Wishlist Heart Button -->
+              <button onclick="toggleWishlist('<%= hostel._id %>', this)" class="btn rounded-circle position-absolute top-0 end-0 m-3 z-3 bg-white shadow-sm border-0 p-2 text-dark" title="Save to Wishlist">
+                <i class="<%= userWishlist.includes(hostel._id.toString()) ? 'fa-solid text-danger' : 'fa-regular' %> fa-heart fs-5"></i>
+              </button>
+
+              <a href="/listings/<%= hostel._id %>" class="text-decoration-none text-dark">
+                <!-- Image Slider Frame -->
+                <div class="card-img-frame">
+                  <img src="<%= hostel.image ? hostel.image.url : 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80' %>" class="card-img-zoom" alt="<%= hostel.title %>">
+                  
+                  <div class="position-absolute bottom-0 start-0 m-3 d-flex gap-2">
+                    <span class="badge-pink shadow-sm">
+                      <i class="fa-solid fa-brain me-1"></i> <%= hostel.aiRecommendationScore %>% AI Match
+                    </span>
+                    <span class="badge-safety shadow-sm bg-white">
+                      <i class="fa-solid fa-shield-check me-1"></i> Safety <%= hostel.safetyScore %>/100
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Card Body -->
+                <div class="p-4 d-flex flex-column justify-content-between">
+                  <div>
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <h4 class="card-title-custom mb-0 text-truncate" style="max-width: 75%;"><%= hostel.title %></h4>
+                      <div class="d-flex align-items-center gap-1 text-warning font-weight-bold small">
+                        <i class="fa-solid fa-star"></i> <%= hostel.rating ? hostel.rating.toFixed(1) : '4.5' %>
+                      </div>
+                    </div>
+
+                    <p class="text-muted small mb-2 text-truncate">
+                      <i class="fa-solid fa-graduation-cap text-navy me-1"></i> <%= hostel.college %> 
+                      <span class="text-pink font-weight-bold" style="color: var(--primary-pink);">(<%= hostel.distanceFromCollege %> km)</span>
+                    </p>
+
+                    <p class="text-muted small mb-3 text-truncate">
+                      <i class="fa-solid fa-location-dot me-1 text-danger"></i> <%= hostel.location %>
+                    </p>
+
+                    <!-- Amenities Chips -->
+                    <div class="d-flex flex-wrap gap-1 mb-3">
+                      <span class="badge badge-navy"><%= hostel.roomType %></span>
+                      <span class="badge badge-navy"><%= hostel.gender %></span>
+                      <% if(hostel.messAvailable){ %>
+                        <span class="badge bg-light text-dark border"><i class="fa-solid fa-utensils me-1 text-warning"></i> Mess</span>
+                      <% } %>
+                      <% if(hostel.wifiAvailable){ %>
+                        <span class="badge bg-light text-dark border"><i class="fa-solid fa-wifi me-1 text-info"></i> WiFi</span>
+                      <% } %>
+                    </div>
+                  </div>
+
+                  <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+                    <div>
+                      <span class="fs-4 fw-bold text-navy">₹<%= hostel.price.toLocaleString('en-IN') %></span>
+                      <span class="text-muted text-xs">/month</span>
+                    </div>
+                    <span class="btn btn-navy btn-sm px-3 rounded-pill">
+                      View Details <i class="fa-solid fa-arrow-right ms-1 text-xs"></i>
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<!-- 5. Why Choose StayWise AI Section -->
+<section class="py-5 bg-white">
+  <div class="container py-4">
+    <div class="text-center mb-5">
+      <span class="badge-pink mb-2 d-inline-block">The StayWise Advantage</span>
+      <h2 class="section-heading">Why University Students Love StayWise AI</h2>
+      <p class="text-muted">Built from the ground up for seamless, safe, and transparent student living</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6">
+        <div class="startup-card p-4 text-center h-100">
+          <div class="rounded-circle p-3 d-inline-flex mb-3" style="background: rgba(233, 30, 99, 0.1);">
+            <i class="fa-solid fa-brain fs-2" style="color: var(--primary-pink);"></i>
+          </div>
+          <h5 class="fw-bold mb-2">AI Recommendation</h5>
+          <p class="text-muted small mb-0">Smart algorithms match hostels based on budget, university distance, and curfew preferences.</p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="startup-card p-4 text-center h-100">
+          <div class="rounded-circle p-3 d-inline-flex mb-3" style="background: rgba(20, 33, 61, 0.1);">
+            <i class="fa-solid fa-shield-check fs-2 text-navy"></i>
+          </div>
+          <h5 class="fw-bold mb-2">100% Verified Hostels</h5>
+          <p class="text-muted small mb-0">Every property undergo a 30-point safety check including CCTV & biometric access.</p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="startup-card p-4 text-center h-100">
+          <div class="rounded-circle p-3 d-inline-flex mb-3" style="background: rgba(16, 185, 129, 0.1);">
+            <i class="fa-solid fa-hand-holding-dollar fs-2 text-success"></i>
+          </div>
+          <h5 class="fw-bold mb-2">Zero Brokerage</h5>
+          <p class="text-muted small mb-0">Book directly with verified property managers without paying middleman commissions.</p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="startup-card p-4 text-center h-100">
+          <div class="rounded-circle p-3 d-inline-flex mb-3" style="background: rgba(234, 179, 8, 0.1);">
+            <i class="fa-solid fa-headset fs-2 text-warning"></i>
+          </div>
+          <h5 class="fw-bold mb-2">24x7 Student Support</h5>
+          <p class="text-muted small mb-0">Dedicated student support team to resolve room maintenance or food issues instantly.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. AI Innovation Section (Dark Navy Background) -->
+<section class="py-5 ai-section-dark">
+  <div class="container py-5">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5">
+        <span class="badge-pink mb-3 d-inline-block">AI Innovation Suite</span>
+        <h2 class="display-5 fw-bold text-white mb-3">Powered by Google Gemini AI Engine</h2>
+        <p class="text-light opacity-75 mb-4 leading-relaxed">
+          StayWise AI integrates state-of-the-art Generative AI to simplify student housing research, budgeting, and roommate pairing.
+        </p>
+
+        <a href="/ai/assistant" class="btn btn-pink-gradient btn-lg">
+          Launch AI Student Suite <i class="fa-solid fa-arrow-right ms-2"></i>
+        </a>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="ai-card-glow p-4">
+              <i class="fa-solid fa-robot fs-2 text-pink mb-3" style="color: var(--primary-pink);"></i>
+              <h5 class="fw-bold text-white">AI Concierge Chatbot</h5>
+              <p class="text-light opacity-75 small mb-0">Instant answers regarding curfew rules, food menus, and campus commute times.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="ai-card-glow p-4">
+              <i class="fa-solid fa-calculator fs-2 text-success mb-3"></i>
+              <h5 class="fw-bold text-white">AI Budget Planner</h5>
+              <p class="text-light opacity-75 small mb-0">Calculate total monthly cost of living (rent + mess + transport + personal) with savings tips.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="ai-card-glow p-4">
+              <i class="fa-solid fa-users-viewfinder fs-2 text-info mb-3"></i>
+              <h5 class="fw-bold text-white">Roommate Matchmaker</h5>
+              <p class="text-light opacity-75 small mb-0">Compute compatibility scores based on sleep schedule, study habits, and cleanliness.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="ai-card-glow p-4">
+              <i class="fa-solid fa-code-compare fs-2 text-warning mb-3"></i>
+              <h5 class="fw-bold text-white">AI Comparison Matrix</h5>
+              <p class="text-light opacity-75 small mb-0">Side-by-side feature comparison between any hostels to make confident decisions.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Statistics Section (Animated Counters) -->
+<section class="py-5 bg-white">
+  <div class="container py-4">
+    <div class="row g-4 text-center">
+      <div class="col-md-4">
+        <div class="p-3">
+          <div class="display-4 fw-bold text-pink mb-1" style="color: var(--primary-pink);">500+</div>
+          <div class="fw-bold text-navy fs-5">Verified Hostels & PGs</div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="p-3 border-start border-end border-light">
+          <div class="display-4 fw-bold text-navy mb-1">10,000+</div>
+          <div class="fw-bold text-navy fs-5">Happy University Students</div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="p-3">
+          <div class="display-4 fw-bold text-success mb-1">95%</div>
+          <div class="fw-bold text-navy fs-5">AI Match Satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. Student Testimonials Section -->
+<section class="py-5 bg-light">
+  <div class="container py-3">
+    <div class="text-center mb-5">
+      <span class="badge-pink mb-2 d-inline-block">Student Reviews</span>
+      <h2 class="section-heading">Loved by Students Across India</h2>
+      <p class="text-muted">Real stories from students who found their ideal home on StayWise AI</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="startup-card p-4 h-100">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;" alt="Ananya">
+            <div>
+              <h6 class="fw-bold mb-0 text-navy">Ananya Sharma</h6>
+              <span class="text-muted text-xs">Delhi University (LSR)</span>
+            </div>
+          </div>
+          <div class="text-warning small mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p class="text-muted small mb-0">"StayWise AI matched me with a safe girls PG just 500m from my college. The AI budget planner helped me stay within my monthly allowance!"</p>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="startup-card p-4 h-100">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=150&q=80" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;" alt="Rohan">
+            <div>
+              <h6 class="fw-bold mb-0 text-navy">Rohan Mehta</h6>
+              <span class="text-muted text-xs">IIT Bombay</span>
+            </div>
+          </div>
+          <div class="text-warning small mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p class="text-muted small mb-0">"Zero brokerage and direct owner booking! I booked my shared flat near Powai in under 10 minutes."</p>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-12">
+        <div class="startup-card p-4 h-100">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;" alt="Priya">
+            <div>
+              <h6 class="fw-bold mb-0 text-navy">Priya Nair</h6>
+              <span class="text-muted text-xs">Symbiosis Pune</span>
+            </div>
+          </div>
+          <div class="text-warning small mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p class="text-muted small mb-0">"The AI Roommate Matchmaker found me an incredible roommate with identical study habits. Truly a game changer for students!"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. Final Call to Action Section (Gradient Banner) -->
+<section class="py-5">
+  <div class="container">
+    <div class="p-5 text-center text-white rounded-5 shadow-lg position-relative overflow-hidden" style="background: var(--accent-pink-gradient);">
+      <h2 class="display-5 fw-bold text-white mb-3">Ready to Find Your Perfect Stay?</h2>
+      <p class="fs-5 text-white opacity-90 mb-4" style="max-width: 600px; margin: 0 auto;">Join thousands of students finding safe, verified, and affordable accommodations with AI.</p>
+      <a href="#properties" class="btn btn-navy btn-lg px-5 shadow">
+        Explore Properties Now <i class="fa-solid fa-rocket ms-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  async function toggleWishlist(hostelId, btnElement) {
+    try {
+      const response = await fetch(`/wishlist/${hostelId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+      });
+      const data = await response.json();
+      if (data.success) {
+        const icon = btnElement.querySelector('i');
+        if (data.action === 'added') {
+          icon.className = 'fa-solid text-danger fa-heart fs-5';
+        } else {
+          icon.className = 'fa-regular fa-heart fs-5';
+        }
+      } else {
+        window.location.href = '/login';
+      }
+    } catch (err) {
+      window.location.href = '/login';
+    }
+  }
+</script>
+
+<%- include("../includes/footer") %>

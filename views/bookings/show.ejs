@@ -1,0 +1,82 @@
+<%- include('../listing/partials/header') -%>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+      <div class="glass-card p-4 p-md-5">
+        <!-- Receipt Header -->
+        <div class="text-center pb-4 border-bottom border-secondary mb-4">
+          <div class="d-inline-flex p-3 rounded-circle mb-2" style="background: rgba(16, 185, 129, 0.15);">
+            <i class="fa-solid fa-receipt text-success fs-2"></i>
+          </div>
+          <h3 class="fw-bold">StayWise Room Booking Receipt</h3>
+          <p class="text-muted small mb-0">Booking ID: <code><%= booking._id %></code></p>
+        </div>
+
+        <!-- Status Pill -->
+        <div class="text-center mb-4">
+          <span class="badge <%= booking.status === 'confirmed' ? 'bg-success' : (booking.status === 'pending' ? 'bg-warning text-dark' : 'bg-danger') %> fs-6 px-4 py-2 rounded-pill">
+            STATUS: <%= booking.status.toUpperCase() %>
+          </span>
+        </div>
+
+        <!-- Details Grid -->
+        <div class="row g-3 mb-4 text-xs text-md-sm">
+          <div class="col-6">
+            <div class="p-3 bg-dark rounded-3 border border-secondary">
+              <div class="text-muted">Accommodation</div>
+              <div class="fw-bold text-light fs-6"><%= booking.hostel ? booking.hostel.title : 'Hostel' %></div>
+              <div class="text-muted"><%= booking.hostel ? booking.hostel.location : '' %></div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 bg-dark rounded-3 border border-secondary">
+              <div class="text-muted">Student Details</div>
+              <div class="fw-bold text-light fs-6"><%= booking.student ? booking.student.username : 'Student' %></div>
+              <div class="text-muted"><%= booking.student ? booking.student.email : '' %></div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 bg-dark rounded-3 border border-secondary">
+              <div class="text-muted">Move-In Date</div>
+              <div class="fw-bold text-warning"><%= new Date(booking.moveInDate).toLocaleDateString('en-IN') %></div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 bg-dark rounded-3 border border-secondary">
+              <div class="text-muted">Contract Duration</div>
+              <div class="fw-bold text-info"><%= booking.durationMonths %> Months</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Breakdown -->
+        <div class="p-4 bg-dark rounded-3 border border-secondary mb-4">
+          <h5 class="fw-bold text-light mb-3">Payment Summary</h5>
+          <div class="d-flex justify-content-between text-muted small mb-2">
+            <span>Monthly Rent</span>
+            <span>₹<%= booking.hostel ? booking.hostel.price.toLocaleString('en-IN') : '0' %></span>
+          </div>
+          <div class="d-flex justify-content-between text-muted small mb-2">
+            <span>Duration</span>
+            <span><%= booking.durationMonths %> Months</span>
+          </div>
+          <hr class="border-secondary">
+          <div class="d-flex justify-content-between fw-bold text-light fs-5">
+            <span>Total Value</span>
+            <span class="text-success">₹<%= booking.totalAmount.toLocaleString('en-IN') %></span>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <a href="/dashboard/student" class="btn btn-primary-gradient w-100 py-2 fw-bold text-center">
+            Go to My Student Dashboard
+          </a>
+          <button onclick="window.print()" class="btn btn-outline-glass px-4"><i class="fa-solid fa-print"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../includes/footer") %>

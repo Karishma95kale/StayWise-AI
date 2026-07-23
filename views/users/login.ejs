@@ -1,0 +1,101 @@
+<%- include('../listing/partials/header') -%>
+
+<div class="container my-5">
+  <div class="startup-card overflow-hidden shadow-lg border-0">
+    <div class="row g-0">
+      <!-- Left Side: Lifestyle Banner -->
+      <div class="col-lg-6 d-none d-lg-block position-relative p-5 text-white d-flex flex-column justify-content-between" style="background: linear-gradient(135deg, rgba(20, 33, 61, 0.95) 0%, rgba(233, 30, 99, 0.85) 100%), url('https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1000&q=80') center/cover;">
+        <div>
+          <span class="badge bg-white text-navy font-weight-bold px-3 py-2 rounded-pill mb-3">StayWise AI Account</span>
+          <h2 class="display-5 fw-bold text-white mb-3">Smart Housing For Future Leaders</h2>
+          <p class="fs-6 opacity-90 leading-relaxed" style="max-width: 440px;">
+            Access your bookings, wishlist, AI roommate matches, and owner dashboards seamlessly.
+          </p>
+        </div>
+
+        <div class="pt-5 border-top border-light border-opacity-25">
+          <div class="d-flex align-items-center gap-3">
+            <div class="rounded-circle bg-white text-pink p-3 fs-4" style="color: var(--primary-pink);">
+              <i class="fa-solid fa-shield-check"></i>
+            </div>
+            <div>
+              <div class="fw-bold text-white">Zero Brokerage Guarantee</div>
+              <div class="small opacity-75">10,000+ Students Living Happily</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side: Login Form -->
+      <div class="col-lg-6 p-4 p-md-5 bg-white d-flex flex-column justify-content-center">
+        <!-- Professional Welcome Section -->
+        <div class="mb-4">
+          <h2 class="fw-bold text-navy mb-2">👋 Welcome Back</h2>
+          <p class="text-muted small leading-relaxed mb-0">
+            Sign in to access your personalized dashboard, AI recommendations, saved properties, bookings, and student community.
+          </p>
+        </div>
+
+        <form action="/login" method="POST" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label for="username" class="form-label text-muted small fw-semibold">Username</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-user"></i></span>
+              <input name="username" type="text" class="form-control bg-light border-start-0" id="username" placeholder="Enter your username" required />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label for="password" class="form-label text-muted small fw-semibold mb-0">Password</label>
+              <a href="#" class="text-pink text-xs text-decoration-none fw-bold" style="color: var(--primary-pink);">Forgot Password?</a>
+            </div>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-lock"></i></span>
+              <input name="password" type="password" class="form-control bg-light border-start-0" id="password" placeholder="••••••••" required />
+            </div>
+          </div>
+
+          <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+            <label class="form-check-label text-muted small" for="rememberMe">Remember me on this device</label>
+          </div>
+
+          <button class="btn btn-pink-gradient w-100 py-3 fw-bold mb-3 shadow" type="submit">
+            <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Log In
+          </button>
+        </form>
+
+        <!-- Social Login -->
+        <div class="text-center my-3 text-muted text-xs text-uppercase font-weight-bold position-relative">
+          <span class="bg-white px-2 position-relative z-1">Or Log In With</span>
+          <hr class="position-absolute top-50 start-0 end-0 m-0 z-0">
+        </div>
+
+        <div class="row g-2 mb-4">
+          <div class="col-6">
+            <button type="button" class="btn btn-outline-navy btn-sm w-100 py-2">
+              <i class="fa-brands fa-google text-danger me-1"></i> Google
+            </button>
+          </div>
+          <div class="col-6">
+            <button type="button" class="btn btn-outline-navy btn-sm w-100 py-2">
+              <i class="fa-brands fa-apple me-1"></i> Apple
+            </button>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <p class="text-muted small mb-0">Don't have an account? <a href="/signup" class="text-pink text-decoration-none fw-bold" style="color: var(--primary-pink);">Register Now</a></p>
+        </div>
+
+        <!-- Subtle Security Footer -->
+        <div class="text-center mt-3 pt-3 border-top text-muted text-xs opacity-75">
+          <i class="fa-solid fa-lock me-1 text-success"></i> Secure login powered by StayWise AI
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../includes/footer') -%>

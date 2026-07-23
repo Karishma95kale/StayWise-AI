@@ -1,0 +1,94 @@
+<%- include('../listing/partials/header') -%>
+
+<div class="container my-5">
+  <!-- Admin Header Banner -->
+  <div class="startup-card p-4 mb-4 text-white" style="background: var(--navy-gradient);">
+    <div class="d-flex align-items-center gap-3">
+      <div class="rounded-circle p-3 text-pink fs-2" style="background: rgba(233, 30, 99, 0.15); color: var(--primary-pink);">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <div>
+        <h2 class="fw-bold mb-1 text-white">Admin Control Panel</h2>
+        <p class="text-light opacity-75 small mb-0">System administration, listing approvals, user moderation, and platform statistics</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Platform Stats -->
+  <div class="row g-3 mb-4 text-center">
+    <div class="col-6 col-md-3">
+      <div class="startup-card p-3">
+        <div class="text-muted text-xs text-uppercase fw-semibold mb-1">Live Hostels</div>
+        <div class="fs-2 fw-bold text-success"><%= stats.totalHostels %></div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="startup-card p-3">
+        <div class="text-muted text-xs text-uppercase fw-semibold mb-1">Pending Approval</div>
+        <div class="fs-2 fw-bold text-warning"><%= stats.pendingCount %></div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="startup-card p-3">
+        <div class="text-muted text-xs text-uppercase fw-semibold mb-1">Platform Users</div>
+        <div class="fs-2 fw-bold text-navy"><%= stats.totalUsers %></div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="startup-card p-3">
+        <div class="text-muted text-xs text-uppercase fw-semibold mb-1">Platform Volume</div>
+        <div class="fs-2 fw-bold text-pink" style="color: var(--primary-pink);">₹<%= stats.totalRevenue.toLocaleString('en-IN') %></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Pending Listing Approvals -->
+    <div class="col-lg-6">
+      <div class="startup-card p-4">
+        <h4 class="fw-bold mb-3"><i class="fa-solid fa-clock-history me-2 text-warning"></i> Pending Listing Approvals</h4>
+        <% if(pendingListings.length === 0){ %>
+          <p class="text-muted small mb-0">All listings are approved and live.</p>
+        <% } else { %>
+          <div class="d-flex flex-column gap-3">
+            <% for(let p of pendingListings){ %>
+              <div class="p-3 bg-light rounded-4 border d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="fw-bold text-navy"><%= p.title %></div>
+                  <div class="text-muted text-xs">Owner: <%= p.owner ? p.owner.username : 'Unknown' %> &bull; ₹<%= p.price %>/mo</div>
+                </div>
+                <form method="POST" action="/admin/approve/<%= p._id %>">
+                  <button class="btn btn-success btn-sm px-3"><i class="fa-solid fa-check me-1"></i> Approve</button>
+                </form>
+              </div>
+            <% } %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- User Management & Moderation -->
+    <div class="col-lg-6">
+      <div class="startup-card p-4">
+        <h4 class="fw-bold mb-3"><i class="fa-solid fa-users-gear me-2 text-navy"></i> User Directory & Moderation</h4>
+        <div class="d-flex flex-column gap-2" style="max-height: 400px; overflow-y: auto;">
+          <% for(let u of allUsers){ %>
+            <div class="p-2 bg-light rounded-3 border d-flex justify-content-between align-items-center text-xs">
+              <div>
+                <strong class="text-navy"><%= u.username %></strong> (<%= u.email %>)
+                <div><span class="badge bg-secondary"><%= u.role %></span></div>
+              </div>
+              <form method="POST" action="/admin/verify-user/<%= u._id %>">
+                <button class="btn btn-sm <%= u.isVerified ? 'btn-outline-success' : 'btn-warning' %> py-1 px-2">
+                  <%= u.isVerified ? 'Verified' : 'Verify User' %>
+                </button>
+              </form>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../includes/footer") %>

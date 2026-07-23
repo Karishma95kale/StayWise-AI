@@ -1,0 +1,137 @@
+<%- include('../listing/partials/header') -%>
+
+<div class="container my-5">
+  <!-- Compare Header Banner -->
+  <div class="startup-card p-4 mb-4">
+    <div class="d-flex align-items-center gap-3">
+      <div class="rounded-circle p-3 text-white fs-3" style="background: var(--navy-gradient);">
+        <i class="fa-solid fa-code-compare"></i>
+      </div>
+      <div>
+        <h2 class="fw-bold mb-1 text-navy">Hostel Comparison Matrix</h2>
+        <p class="text-muted small mb-0">Compare up to 3 student accommodations side-by-side on rent, deposit, safety, mess, and curfew</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selector Form Bar -->
+  <div class="startup-card p-4 mb-4">
+    <form action="/compare" method="GET" class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label text-muted small fw-semibold">Hostel #1</label>
+        <select name="id1" class="form-select bg-light">
+          <option value="">Select Accommodation 1</option>
+          <% for(let h of allHostels){ %>
+            <option value="<%= h._id %>" <%= id1 === h._id.toString() ? 'selected' : '' %>><%= h.title %> (₹<%= h.price %>/mo)</option>
+          <% } %>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label text-muted small fw-semibold">Hostel #2</label>
+        <select name="id2" class="form-select bg-light">
+          <option value="">Select Accommodation 2</option>
+          <% for(let h of allHostels){ %>
+            <option value="<%= h._id %>" <%= id2 === h._id.toString() ? 'selected' : '' %>><%= h.title %> (₹<%= h.price %>/mo)</option>
+          <% } %>
+        </select>
+      </div>
+
+      <div class="col-md-4 d-flex align-items-end">
+        <button type="submit" class="btn btn-pink-gradient w-100 py-2 fw-bold shadow">
+          <i class="fa-solid fa-code-compare me-1"></i> Compare Selected
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Comparison Matrix Table -->
+  <% if(selectedHostels.length === 0){ %>
+    <div class="startup-card p-5 text-center my-4">
+      <i class="fa-solid fa-columns fs-1 text-muted mb-3"></i>
+      <h4 class="fw-bold text-navy">Select Accommodations to Compare</h4>
+      <p class="text-muted small">Choose 2 or 3 hostels above to view a detailed feature comparison table.</p>
+    </div>
+  <% } else { %>
+    <div class="table-responsive startup-card p-3 mb-5">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th style="width: 25%;" class="text-navy">Feature Comparison</th>
+            <% for(let h of selectedHostels){ %>
+              <th style="width: 37.5%;" class="text-center">
+                <img src="<%= h.image ? h.image.url : '' %>" style="height: 140px; width: 100%; object-fit: cover;" class="rounded-4 mb-2" alt="Hostel">
+                <div class="fw-bold fs-5 text-navy"><%= h.title %></div>
+                <span class="badge-pink text-xs shadow-sm"><%= h.aiRecommendationScore %>% AI Match</span>
+              </th>
+            <% } %>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="fw-semibold text-muted">Monthly Rent</td>
+            <% for(let h of selectedHostels){ %>
+              <td class="text-center fs-4 fw-bold text-navy">₹<%= h.price.toLocaleString('en-IN') %>/mo</td>
+            <% } %>
+          </tr>
+          <tr>
+            <td class="fw-semibold text-muted">Security Deposit</td>
+            <% for(let h of selectedHostels){ %>
+              <td class="text-center fw-bold">₹<%= h.securityDeposit ? h.securityDeposit.toLocaleString('en-IN') : '0' %></td>
+            <% } %>
+          </tr>
+          <tr>
+            <td class="fw-semibold text-muted">Gender Policy</td>
+            <% for(let h of selectedHostels){ %>
+              <td class="text-center">
+                <span class="badge badge-navy"><%= h.gender %></span>
+              </td>
+            <% } %>
+          </tr>
+          <tr>
+            <td class="fw-semibold text-muted">Room Type</td>
+            <% for(let h of selectedHostels){ %>
+              <td class="text-center text-pink fw-bold" style="color: var(--primary-pink);"><%= h.roomType %></td>
+            <% } %>
+          </tr>
+          <tr>
+            <td class="fw-semibold text-muted">Distance to College</td>
+            <% for(let h of selectedHostels){ %>
+              <td class="text-center text-navy"><%= h.distanceFromCollege %> km (<%= h.college %>)</td>
+            <% } %>
+          </tr>
+          <tr>
+            <td class="fw-semibold text-muted">Safety Score</td>
+            <% for(let h of selectedHostels){ %>
+              <td class="text-center fs-5 fw-bold text-success"><%= h.safetyScore %>/100</td>
+            <% } %>
+          </tr>
+          <tr>
+            <td class="fw-semibold text-muted">Mess Availability</td>
+            <% for(let h of selectedHostels){ %>
+              <td class="text-center">
+                <%= h.messAvailable ? '✅ Included (₹' + h.messCharges + '/mo)' : '❌ Kitchen / Self' %>
+              </td>
+            <% } %>
+          </tr>
+          <tr>
+            <td class="fw-semibold text-muted">Curfew Timing</td>
+            <% for(let h of selectedHostels){ %>
+              <td class="text-center text-navy"><%= h.curfewTime || '10:30 PM' %></td>
+            <% } %>
+          </tr>
+          <tr>
+            <td class="fw-semibold text-muted">Action</td>
+            <% for(let h of selectedHostels){ %>
+              <td class="text-center">
+                <a href="/listings/<%= h._id %>" class="btn btn-pink-gradient btn-sm px-4">Book / Details</a>
+              </td>
+            <% } %>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>
+
+<%- include("../includes/footer") %>

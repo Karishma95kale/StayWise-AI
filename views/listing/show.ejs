@@ -1,0 +1,417 @@
+<%- include('./partials/header') -%>
+
+<div class="container my-5">
+  <!-- Title & Action Header -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span class="badge-pink shadow-sm"><i class="fa-solid fa-sparkles me-1"></i> <%= listing.aiRecommendationScore %>% AI Match</span>
+        <span class="badge-safety shadow-sm bg-white"><i class="fa-solid fa-shield-check me-1"></i> Safety Index <%= listing.safetyScore %>/100</span>
+        <span class="badge badge-navy"><%= listing.gender %> Hostel</span>
+        <span class="badge bg-light text-dark border"><%= listing.roomType %></span>
+      </div>
+      <h1 class="display-6 fw-bold mb-1 text-navy"><%= listing.title %></h1>
+      <p class="text-muted mb-0">
+        <i class="fa-solid fa-graduation-cap me-1 text-navy"></i> Near <strong><%= listing.college %></strong> (<%= listing.distanceFromCollege %> km away) &bull;
+        <i class="fa-solid fa-location-dot me-1 text-pink" style="color: var(--primary-pink);"></i> <%= listing.location %>
+      </p>
+    </div>
+
+    <div class="d-flex gap-2">
+      <button onclick="toggleWishlist('<%= listing._id %>', this)" class="btn btn-outline-navy px-3 py-2">
+        <i class="<%= typeof isWishlisted !== 'undefined' && isWishlisted ? 'fa-solid text-danger' : 'fa-regular' %> fa-heart me-1"></i> Wishlist
+      </button>
+      <a href="/compare?id1=<%= listing._id %>" class="btn btn-outline-navy px-3 py-2">
+        <i class="fa-solid fa-code-compare me-1"></i> Compare
+      </a>
+      <% if(currUser && (listing.owner._id.equals(currUser._id) || currUser.role === 'admin')){ %>
+        <a href="/listings/<%= listing._id %>/edit" class="btn btn-warning px-3 py-2 fw-semibold">
+          <i class="fa-solid fa-pen me-1"></i> Edit
+        </a>
+        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline" onsubmit="return confirm('Are you sure you want to remove this hostel listing?')">
+          <button class="btn btn-danger px-3 py-2 fw-semibold"><i class="fa-solid fa-trash me-1"></i> Delete</button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Image Gallery Grid -->
+  <div class="row g-3 mb-5">
+    <div class="col-lg-8">
+      <div class="card-img-frame shadow-md" style="height: 440px;">
+        <img src="<%= listing.image ? listing.image.url : (listing.images && listing.images.length > 0 ? listing.images[0].url : 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=1200&q=80') %>" class="w-100 h-100 object-fit-cover rounded-4" alt="<%= listing.title %>">
+      </div>
+    </div>
+    <div class="col-lg-4 d-none d-lg-flex flex-column gap-3">
+      <% if(listing.images && listing.images.length > 1){ %>
+        <% for(let i = 1; i < Math.min(listing.images.length, 3); i++){ %>
+          <div class="card-img-frame shadow-sm" style="height: 210px;">
+            <img src="<%= listing.images[i].url %>" class="w-100 h-100 object-fit-cover rounded-4" alt="Gallery">
+          </div>
+        <% } %>
+      <% } else { %>
+        <div class="card-img-frame shadow-sm" style="height: 210px;">
+          <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80" class="w-100 h-100 object-fit-cover rounded-4" alt="Gallery Default">
+        </div>
+        <div class="card-img-frame shadow-sm" style="height: 210px;">
+          <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80" class="w-100 h-100 object-fit-cover rounded-4" alt="Gallery Default">
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Left Main Content -->
+    <div class="col-lg-8">
+      <!-- Specifications Matrix Card -->
+      <div class="startup-card p-4 mb-4">
+        <h4 class="fw-bold mb-3"><i class="fa-solid fa-list-check me-2 text-pink" style="color: var(--primary-pink);"></i> Hostel Specifications</h4>
+        <div class="row g-3 text-center">
+          <div class="col-6 col-md-3">
+            <div class="bg-light p-3 rounded-4 border">
+              <div class="text-muted text-xs font-weight-bold text-uppercase">Monthly Rent</div>
+              <div class="fs-4 fw-bold text-navy">₹<%= listing.price.toLocaleString('en-IN') %></div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="bg-light p-3 rounded-4 border">
+              <div class="text-muted text-xs font-weight-bold text-uppercase">Security Deposit</div>
+              <div class="fs-4 fw-bold text-navy">₹<%= listing.securityDeposit ? listing.securityDeposit.toLocaleString('en-IN') : '0' %></div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="bg-light p-3 rounded-4 border">
+              <div class="text-muted text-xs font-weight-bold text-uppercase">Curfew Timing</div>
+              <div class="fs-4 fw-bold text-warning"><%= listing.curfewTime || '10:30 PM' %></div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="bg-light p-3 rounded-4 border">
+              <div class="text-muted text-xs font-weight-bold text-uppercase">Safety Index</div>
+              <div class="fs-4 fw-bold text-success"><%= listing.safetyScore %>/100</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Description & Amenities Grid -->
+      <div class="startup-card p-4 mb-4">
+        <h4 class="fw-bold mb-3"><i class="fa-solid fa-circle-info me-2 text-navy"></i> Property Overview</h4>
+        <p class="text-muted leading-relaxed mb-4"><%= listing.description %></p>
+
+        <h5 class="fw-bold mb-3"><i class="fa-solid fa-wifi me-2 text-pink" style="color: var(--primary-pink);"></i> Amenities & Facilities</h5>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <% if(listing.amenities && listing.amenities.length > 0){ %>
+            <% for(let item of listing.amenities){ %>
+              <span class="badge bg-light text-dark border px-3 py-2 fs-6 rounded-pill">
+                <i class="fa-solid fa-check text-success me-1"></i> <%= item %>
+              </span>
+            <% } %>
+          <% } %>
+          <% if(listing.messAvailable){ %>
+            <span class="badge bg-light text-dark border px-3 py-2 fs-6 rounded-pill">
+              <i class="fa-solid fa-utensils text-warning me-1"></i> Mess Service (₹<%= listing.messCharges %>/mo)
+            </span>
+          <% } %>
+          <% if(listing.wifiAvailable){ %>
+            <span class="badge bg-light text-dark border px-3 py-2 fs-6 rounded-pill">
+              <i class="fa-solid fa-wifi text-info me-1"></i> High Speed WiFi
+            </span>
+          <% } %>
+          <% if(listing.powerBackup){ %>
+            <span class="badge bg-light text-dark border px-3 py-2 fs-6 rounded-pill">
+              <i class="fa-solid fa-bolt text-warning me-1"></i> 24/7 Power Backup
+            </span>
+          <% } %>
+        </div>
+
+        <!-- Verified Owner Card -->
+        <div class="p-3 bg-light rounded-4 border d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-3">
+            <div class="rounded-circle p-2 d-flex align-items-center justify-content-center text-white" style="width: 45px; height: 45px; background: var(--secondary-navy);">
+              <i class="fa-solid fa-user-tie fs-4"></i>
+            </div>
+            <div>
+              <div class="fw-bold text-navy"><%= listing.owner ? listing.owner.username : 'Verified Manager' %></div>
+              <div class="text-muted text-xs">Verified Property Owner &bull; <%= listing.owner && listing.owner.email ? listing.owner.email : 'owner@staywise.ai' %></div>
+            </div>
+          </div>
+          <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill"><i class="fa-solid fa-shield-check me-1"></i> Verified Partner</span>
+        </div>
+      </div>
+
+      <!-- Nearby Infrastructure & Commute Matrix -->
+      <div class="startup-card p-4 mb-4">
+        <h4 class="fw-bold mb-3"><i class="fa-solid fa-map-location-dot me-2 text-navy"></i> Nearby Commute & Infrastructure</h4>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-4 border text-center">
+              <i class="fa-solid fa-graduation-cap fs-3 text-navy mb-2"></i>
+              <div class="fw-bold small text-navy">Campus / College</div>
+              <div class="text-muted text-xs"><%= listing.college %> (<%= listing.distanceFromCollege %> km)</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-4 border text-center">
+              <i class="fa-solid fa-hospital-user fs-3 text-danger mb-2"></i>
+              <div class="fw-bold small text-navy">Medical / Hospital</div>
+              <div class="text-muted text-xs">City Healthcare Hospital (1.2 km)</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-4 border text-center">
+              <i class="fa-solid fa-bus-simple fs-3 text-success mb-2"></i>
+              <div class="fw-bold small text-navy">Metro / Transit Stop</div>
+              <div class="text-muted text-xs">Central Bus & Metro Hub (0.4 km)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Reviews & AI Summarizer -->
+      <div class="startup-card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="fw-bold mb-0"><i class="fa-solid fa-star me-2 text-warning"></i> Student Reviews</h4>
+          <button onclick="summarizeReviews('<%= listing._id %>')" class="btn btn-sm btn-outline-navy">
+            <i class="fa-solid fa-sparkles me-1 text-pink" style="color: var(--primary-pink);"></i> Summarize Reviews with AI
+          </button>
+        </div>
+
+        <!-- AI Summary Container -->
+        <div id="aiSummaryBox" class="p-3 mb-4 rounded-4 border border-warning text-dark" style="display: none; background: rgba(234, 179, 8, 0.08);">
+          <div class="fw-bold text-warning mb-2"><i class="fa-solid fa-robot me-1"></i> AI Review Summary</div>
+          <div id="aiSummaryText" class="small text-muted">Analyzing student feedback...</div>
+        </div>
+
+        <!-- Add Review Form -->
+        <% if(currUser){ %>
+          <div class="p-4 bg-light rounded-4 border mb-4">
+            <h5 class="fw-bold mb-3 text-navy">Leave Your Review</h5>
+            <form action="/listings/<%= listing._id %>/reviews" method="POST" class="needs-validation" novalidate>
+              <div class="mb-3">
+                <label class="form-label text-muted small fw-semibold">Rating</label>
+                <fieldset class="starability-slot">
+                  <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                  <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                  <label for="first-rate1" title="Terrible">1 star</label>
+                  <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                  <label for="first-rate2" title="Not good">2 stars</label>
+                  <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                  <label for="first-rate3" title="Average">3 stars</label>
+                  <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                  <label for="first-rate4" title="Very good">4 stars</label>
+                  <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                  <label for="first-rate5" title="Amazing">5 stars</label>
+                </fieldset>
+              </div>
+
+              <div class="mb-3">
+                <label for="comment" class="form-label text-muted small fw-semibold">Comments</label>
+                <textarea name="review[comment]" id="comment" rows="3" class="form-control" placeholder="Share your experience regarding food, wifi, curfew, or safety..." required></textarea>
+              </div>
+              <button class="btn btn-pink-gradient px-4" type="submit">Submit Review</button>
+            </form>
+          </div>
+        <% } %>
+
+        <!-- Review List -->
+        <% if(listing.reviews && listing.reviews.length > 0){ %>
+          <div class="row g-3">
+            <% for(let review of listing.reviews){ %>
+              <div class="col-12">
+                <div class="p-3 bg-light rounded-4 border">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div class="d-flex align-items-center gap-2">
+                      <div class="rounded-circle text-center fw-bold text-white py-1" style="width: 34px; height: 34px; background: var(--secondary-navy);">
+                        <%= review.author ? review.author.username.charAt(0).toUpperCase() : 'S' %>
+                      </div>
+                      <div>
+                        <div class="fw-bold text-navy small"><%= review.author ? review.author.username : 'Student' %></div>
+                        <p class="starability-result" data-rating="<%= review.rating %>"></p>
+                      </div>
+                    </div>
+                    <% if(currUser && (review.author._id.equals(currUser._id) || currUser.role === 'admin')){ %>
+                      <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                        <button class="btn btn-sm text-danger border-0"><i class="fa-solid fa-trash-can"></i></button>
+                      </form>
+                    <% } %>
+                  </div>
+                  <p class="text-muted small mb-2"><%= review.comment %></p>
+
+                  <div class="d-flex align-items-center justify-content-between pt-2 border-top text-xs">
+                    <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>/like" class="d-inline">
+                      <button class="btn btn-sm text-muted border-0 p-0">
+                        <i class="fa-solid fa-thumbs-up me-1 text-navy"></i> Helpful (<%= review.likes ? review.likes.length : 0 %>)
+                      </button>
+                    </form>
+                    <% if(review.ownerResponse){ %>
+                      <span class="text-success"><i class="fa-solid fa-reply me-1"></i> Owner Responded</span>
+                    <% } %>
+                  </div>
+
+                  <% if(review.ownerResponse){ %>
+                    <div class="mt-2 p-2 rounded-3 bg-white border-start border-success border-3 text-xs text-muted">
+                      <strong class="text-success">Owner Response:</strong> <%= review.ownerResponse %>
+                    </div>
+                  <% } else if(currUser && (listing.owner._id.equals(currUser._id) || currUser.role === 'admin')){ %>
+                    <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>/reply" class="mt-2">
+                      <div class="input-group input-group-sm">
+                        <input type="text" name="response" class="form-control" placeholder="Write a response to this review..." required>
+                        <button class="btn btn-outline-navy btn-sm" type="submit">Reply</button>
+                      </div>
+                    </form>
+                  <% } %>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        <% } else { %>
+          <p class="text-muted small">No reviews submitted yet. Be the first to share your review!</p>
+        <% } %>
+      </div>
+
+      <!-- Similar Properties -->
+      <% if(typeof nearbyHostels !== 'undefined' && nearbyHostels.length > 0){ %>
+        <div class="startup-card p-4">
+          <h4 class="fw-bold mb-3"><i class="fa-solid fa-building me-2 text-navy"></i> Similar Student Accommodations</h4>
+          <div class="row row-cols-md-3 row-cols-1 g-3">
+            <% for(let sim of nearbyHostels){ %>
+              <div class="col">
+                <a href="/listings/<%= sim._id %>" class="text-decoration-none text-dark">
+                  <div class="border rounded-4 overflow-hidden shadow-sm">
+                    <img src="<%= sim.image ? sim.image.url : '' %>" style="height: 120px; width: 100%; object-fit: cover;" alt="Sim">
+                    <div class="p-2">
+                      <div class="fw-bold text-truncate small"><%= sim.title %></div>
+                      <div class="text-pink fw-bold text-xs" style="color: var(--primary-pink);">₹<%= sim.price %>/mo</div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Right Sticky Booking Card -->
+    <div class="col-lg-4">
+      <div class="startup-card p-4 sticky-top" style="top: 100px;">
+        <div class="d-flex justify-content-between align-items-baseline mb-3">
+          <div>
+            <span class="fs-2 fw-bold text-navy">₹<%= listing.price.toLocaleString('en-IN') %></span>
+            <span class="text-muted small">/month</span>
+          </div>
+          <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill"><%= listing.availableBeds %> Beds Left</span>
+        </div>
+
+        <div class="p-3 bg-light rounded-4 border mb-4">
+          <div class="d-flex justify-content-between small mb-2">
+            <span class="text-muted">Security Deposit</span>
+            <span class="fw-semibold text-navy">₹<%= listing.securityDeposit ? listing.securityDeposit.toLocaleString('en-IN') : '0' %></span>
+          </div>
+          <div class="d-flex justify-content-between small mb-2">
+            <span class="text-muted">Room Type</span>
+            <span class="fw-semibold text-pink" style="color: var(--primary-pink);"><%= listing.roomType %></span>
+          </div>
+          <div class="d-flex justify-content-between small">
+            <span class="text-muted">Distance to College</span>
+            <span class="fw-semibold text-navy"><%= listing.distanceFromCollege %> km</span>
+          </div>
+        </div>
+
+        <!-- Book Room Action Button -->
+        <button class="btn btn-pink-gradient w-100 py-3 fw-bold mb-3 shadow" data-bs-toggle="modal" data-bs-target="#bookingModal">
+          <i class="fa-solid fa-calendar-check me-2"></i> Book Room Now
+        </button>
+
+        <a href="/ai/assistant" class="btn btn-outline-navy w-100 py-2 text-center text-decoration-none">
+          <i class="fa-solid fa-robot me-2 text-pink" style="color: var(--primary-pink);"></i> Ask AI Chatbot About Hostel
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content startup-card border-0">
+      <div class="modal-header border-bottom">
+        <h5 class="modal-title fw-bold text-navy" id="bookingModalLabel"><i class="fa-solid fa-bed me-2 text-pink" style="color: var(--primary-pink);"></i> Reserve Room at <%= listing.title %></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="/bookings" method="POST">
+        <input type="hidden" name="booking[hostelId]" value="<%= listing._id %>">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label text-muted small fw-semibold">Room Type</label>
+            <input type="text" name="booking[roomType]" class="form-control" value="<%= listing.roomType %>" readonly>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-muted small fw-semibold">Move-In Date</label>
+            <input type="date" name="booking[moveInDate]" class="form-control" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-muted small fw-semibold">Duration (Months)</label>
+            <select name="booking[durationMonths]" class="form-select">
+              <option value="6">6 Months</option>
+              <option value="11" selected>11 Months (Standard Academic Year)</option>
+              <option value="12">12 Months</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-muted small fw-semibold">Special Requests (Optional)</label>
+            <textarea name="booking[specialRequests]" class="form-control" rows="2" placeholder="e.g. Ground floor preferred, vegetarian roommate preference..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer border-top">
+          <button type="button" class="btn btn-outline-navy" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-pink-gradient px-4">Confirm Reservation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function summarizeReviews(hostelId) {
+    const box = document.getElementById('aiSummaryBox');
+    const text = document.getElementById('aiSummaryText');
+    box.style.display = 'block';
+    text.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> Generating AI Summary...';
+    try {
+      const res = await fetch(`/ai/summarize-reviews?hostelId=${hostelId}`);
+      const data = await res.json();
+      text.innerHTML = data.summary;
+    } catch(e) {
+      text.innerHTML = 'AI Summary unavailable. Overall ratings indicate high student satisfaction.';
+    }
+  }
+
+  async function toggleWishlist(hostelId, btnElement) {
+    try {
+      const response = await fetch(`/wishlist/${hostelId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+      });
+      const data = await response.json();
+      if (data.success) {
+        const icon = btnElement.querySelector('i');
+        if (data.action === 'added') {
+          icon.className = 'fa-solid text-danger fa-heart me-1';
+        } else {
+          icon.className = 'fa-regular fa-heart me-1';
+        }
+      } else {
+        window.location.href = '/login';
+      }
+    } catch (err) {
+      window.location.href = '/login';
+    }
+  }
+</script>
+
+<%- include("../includes/footer") %>

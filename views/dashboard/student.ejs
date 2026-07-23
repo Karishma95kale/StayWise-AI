@@ -1,0 +1,120 @@
+<%- include('../listing/partials/header') -%>
+
+<div class="container my-5">
+  <!-- Student Header Banner -->
+  <div class="startup-card p-4 mb-4 text-white" style="background: var(--navy-gradient);">
+    <div class="d-flex align-items-center gap-3">
+      <div class="rounded-circle p-3 text-pink fs-2" style="background: rgba(233, 30, 99, 0.15); color: var(--primary-pink);">
+        <i class="fa-solid fa-user-graduate"></i>
+      </div>
+      <div>
+        <h2 class="fw-bold mb-1 text-white">Student Portal: <%= user.username %></h2>
+        <p class="text-light opacity-75 small mb-0">
+          <i class="fa-solid fa-graduation-cap me-1 text-pink" style="color: var(--primary-pink);"></i> <%= user.collegeName || 'University Student' %> &bull;
+          Monthly Budget: <strong>₹<%= user.budget ? user.budget.toLocaleString('en-IN') : '10,000' %></strong>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Main Left Column -->
+    <div class="col-lg-8">
+      <!-- Active Bookings -->
+      <div class="startup-card p-4 mb-4">
+        <h4 class="fw-bold mb-3"><i class="fa-solid fa-bed me-2 text-pink" style="color: var(--primary-pink);"></i> My Room Reservations</h4>
+        <% if(myBookings.length === 0){ %>
+          <div class="text-center p-4 bg-light rounded-4 border">
+            <i class="fa-solid fa-calendar-xmark text-muted fs-1 mb-2"></i>
+            <p class="text-muted small mb-3">No active room bookings found.</p>
+            <a href="/listings" class="btn btn-pink-gradient btn-sm px-4">Browse Hostels</a>
+          </div>
+        <% } else { %>
+          <div class="d-flex flex-column gap-3">
+            <% for(let b of myBookings){ %>
+              <div class="p-3 bg-light rounded-4 border d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <h5 class="fw-bold mb-0 text-navy"><%= b.hostel ? b.hostel.title : 'Hostel' %></h5>
+                    <span class="badge <%= b.status === 'confirmed' ? 'bg-success' : (b.status === 'pending' ? 'bg-warning text-dark' : 'bg-danger') %>">
+                      <%= b.status.toUpperCase() %>
+                    </span>
+                  </div>
+                  <div class="text-muted text-xs">
+                    Move-in: <strong><%= new Date(b.moveInDate).toLocaleDateString('en-IN') %></strong> &bull; Duration: <%= b.durationMonths %> Months
+                  </div>
+                </div>
+                <div class="text-md-end">
+                  <div class="fs-5 fw-bold text-navy">₹<%= b.totalAmount.toLocaleString('en-IN') %></div>
+                  <a href="/bookings/<%= b._id %>" class="btn btn-outline-navy btn-sm px-3 mt-1">View Receipt</a>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Wishlist / Saved Hostels -->
+      <div class="startup-card p-4 mb-4">
+        <h4 class="fw-bold mb-3"><i class="fa-solid fa-heart me-2 text-danger"></i> Saved Wishlist</h4>
+        <% if(!user.wishlist || user.wishlist.length === 0){ %>
+          <p class="text-muted small mb-0">No hostels saved to your wishlist yet.</p>
+        <% } else { %>
+          <div class="row row-cols-md-2 row-cols-1 g-3">
+            <% for(let item of user.wishlist){ %>
+              <div class="col">
+                <div class="p-3 bg-light rounded-4 border position-relative">
+                  <div class="fw-bold text-navy text-truncate mb-1"><%= item.title %></div>
+                  <div class="text-muted text-xs mb-2"><i class="fa-solid fa-location-dot text-danger me-1"></i> <%= item.location %></div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-bold text-navy">₹<%= item.price ? item.price.toLocaleString('en-IN') : '' %>/mo</span>
+                    <a href="/listings/<%= item._id %>" class="btn btn-pink-gradient btn-sm px-3">View</a>
+                  </div>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Right Column Sidebar -->
+    <div class="col-lg-4">
+      <!-- AI Recommendations -->
+      <div class="startup-card p-4 mb-4">
+        <h5 class="fw-bold mb-3"><i class="fa-solid fa-sparkles me-2 text-warning"></i> AI Top Picks for You</h5>
+        <div class="d-flex flex-column gap-3">
+          <% for(let rec of recommendedHostels){ %>
+            <div class="p-2 bg-light rounded-4 border d-flex gap-3 align-items-center">
+              <img src="<%= rec.image ? rec.image.url : '' %>" style="width: 60px; height: 60px; object-fit: cover;" class="rounded-3" alt="Rec">
+              <div class="overflow-hidden">
+                <div class="fw-bold text-truncate text-navy small"><%= rec.title %></div>
+                <div class="text-muted text-xs"><%= rec.aiRecommendationScore %>% AI Match &bull; ₹<%= rec.price %>/mo</div>
+                <a href="/listings/<%= rec._id %>" class="text-pink text-xs text-decoration-none fw-bold" style="color: var(--primary-pink);">Details &rarr;</a>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- In-app Notifications -->
+      <div class="startup-card p-4">
+        <h5 class="fw-bold mb-3"><i class="fa-solid fa-bell me-2 text-info"></i> Notifications</h5>
+        <% if(notifications.length === 0){ %>
+          <p class="text-muted small mb-0">No new notifications.</p>
+        <% } else { %>
+          <div class="d-flex flex-column gap-2">
+            <% for(let n of notifications){ %>
+              <div class="p-2 bg-light rounded-3 border text-xs">
+                <div class="fw-bold text-navy"><%= n.title %></div>
+                <div class="text-muted"><%= n.message %></div>
+              </div>
+            <% } %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../includes/footer") %>
