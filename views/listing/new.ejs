@@ -3,28 +3,28 @@
 <div class="container my-5">
   <div class="row justify-content-center">
     <div class="col-lg-9 col-md-10">
-      <div class="glass-card p-4 p-md-5">
+      <div class="startup-card p-4 p-md-5">
         <div class="d-flex align-items-center gap-3 mb-4">
-          <div class="bg-gradient-primary rounded-3 p-3 text-white">
-            <i class="fa-solid fa-building-circle-check fs-3"></i>
+          <div class="rounded-circle p-3 text-white fs-3" style="background: var(--navy-gradient);">
+            <i class="fa-solid fa-building-circle-check"></i>
           </div>
           <div>
-            <h2 class="fw-bold mb-0">Register New Student Hostel / PG</h2>
+            <h2 class="fw-bold mb-0 text-navy">Register New Student Hostel / PG</h2>
             <p class="text-muted small mb-0">List your property on StayWise AI to reach university students</p>
           </div>
         </div>
 
         <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
           <!-- Basic Info -->
-          <h5 class="fw-bold text-purple mb-3"><i class="fa-solid fa-info-circle me-1"></i> Basic Accommodation Info</h5>
+          <h5 class="fw-bold text-navy mb-3"><i class="fa-solid fa-info-circle me-1 text-pink" style="color: var(--primary-pink);"></i> Basic Accommodation Info</h5>
           <div class="row g-3 mb-4">
             <div class="col-md-8">
               <label for="title" class="form-label text-muted small fw-semibold">Hostel / Property Name</label>
-              <input name="listing[title]" placeholder="e.g. St. Stephen's Student Residency" type="text" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[title]" placeholder="e.g. St. Stephen's Student Residency" type="text" class="form-control bg-light" required />
             </div>
             <div class="col-md-4">
               <label for="gender" class="form-label text-muted small fw-semibold">Gender Policy</label>
-              <select name="listing[gender]" class="form-select bg-dark border-secondary text-light">
+              <select name="listing[gender]" class="form-select bg-light">
                 <option value="Co-ed">Co-ed</option>
                 <option value="Boys">Boys Only</option>
                 <option value="Girls">Girls Only</option>
@@ -33,29 +33,29 @@
 
             <div class="col-12">
               <label for="description" class="form-label text-muted small fw-semibold">Property Description & Rules</label>
-              <textarea name="listing[description]" rows="3" placeholder="Describe room features, mess timing, security, study environment..." class="form-control bg-dark border-secondary text-light" required></textarea>
+              <textarea name="listing[description]" rows="3" placeholder="Describe room features, mess timing, security, study environment..." class="form-control bg-light" required></textarea>
             </div>
           </div>
 
           <!-- Pricing & Capacity -->
-          <h5 class="fw-bold text-success mb-3"><i class="fa-solid fa-indian-rupee-sign me-1"></i> Pricing & Capacity</h5>
+          <h5 class="fw-bold text-navy mb-3"><i class="fa-solid fa-indian-rupee-sign me-1 text-success"></i> Pricing & Capacity</h5>
           <div class="row g-3 mb-4">
             <div class="col-md-4">
               <label for="price" class="form-label text-muted small fw-semibold">Monthly Rent (₹)</label>
-              <input name="listing[price]" type="number" placeholder="9500" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[price]" type="number" placeholder="9500" class="form-control bg-light" required />
             </div>
             <div class="col-md-4">
               <label for="securityDeposit" class="form-label text-muted small fw-semibold">Security Deposit (₹)</label>
-              <input name="listing[securityDeposit]" type="number" placeholder="10000" class="form-control bg-dark border-secondary text-light" />
+              <input name="listing[securityDeposit]" type="number" placeholder="10000" class="form-control bg-light" />
             </div>
             <div class="col-md-4">
               <label for="availableBeds" class="form-label text-muted small fw-semibold">Available Beds</label>
-              <input name="listing[availableBeds]" type="number" placeholder="4" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[availableBeds]" type="number" placeholder="4" class="form-control bg-light" required />
             </div>
 
             <div class="col-md-6">
               <label for="roomType" class="form-label text-muted small fw-semibold">Room Accommodation Type</label>
-              <select name="listing[roomType]" class="form-select bg-dark border-secondary text-light">
+              <select name="listing[roomType]" class="form-select bg-light">
                 <option value="Single">Single Room</option>
                 <option value="Double Sharing" selected>Double Sharing</option>
                 <option value="Triple Sharing">Triple Sharing</option>
@@ -66,34 +66,34 @@
 
             <div class="col-md-6">
               <label for="curfewTime" class="form-label text-muted small fw-semibold">Curfew Timing</label>
-              <input name="listing[curfewTime]" type="text" placeholder="e.g. 10:30 PM or No Curfew" class="form-control bg-dark border-secondary text-light" value="10:30 PM" />
+              <input name="listing[curfewTime]" type="text" placeholder="e.g. 10:30 PM or No Curfew" class="form-control bg-light" value="10:30 PM" />
             </div>
           </div>
 
           <!-- Location & Campus Proximity -->
-          <h5 class="fw-bold text-info mb-3"><i class="fa-solid fa-compass me-1"></i> College Proximity & Location</h5>
+          <h5 class="fw-bold text-navy mb-3"><i class="fa-solid fa-compass me-1 text-info"></i> College Proximity & Location</h5>
           <div class="row g-3 mb-4">
             <div class="col-md-7">
               <label for="college" class="form-label text-muted small fw-semibold">Nearby College / University</label>
-              <input name="listing[college]" type="text" placeholder="e.g. Delhi University North Campus" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[college]" type="text" placeholder="e.g. Delhi University North Campus" class="form-control bg-light" required />
             </div>
             <div class="col-md-5">
               <label for="distanceFromCollege" class="form-label text-muted small fw-semibold">Distance from Campus (km)</label>
-              <input name="listing[distanceFromCollege]" type="number" step="0.1" placeholder="0.5" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[distanceFromCollege]" type="number" step="0.1" placeholder="0.5" class="form-control bg-light" required />
             </div>
 
             <div class="col-md-8">
               <label for="location" class="form-label text-muted small fw-semibold">Full Address / Locality</label>
-              <input name="listing[location]" type="text" placeholder="Hudson Lane, GTB Nagar, New Delhi" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[location]" type="text" placeholder="Hudson Lane, GTB Nagar, New Delhi" class="form-control bg-light" required />
             </div>
             <div class="col-md-4">
               <label for="country" class="form-label text-muted small fw-semibold">Country</label>
-              <input name="listing[country]" type="text" value="India" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[country]" type="text" value="India" class="form-control bg-light" required />
             </div>
           </div>
 
           <!-- Amenities Checklist -->
-          <h5 class="fw-bold text-warning mb-3"><i class="fa-solid fa-list me-1"></i> Amenities & Facilities</h5>
+          <h5 class="fw-bold text-navy mb-3"><i class="fa-solid fa-list me-1 text-warning"></i> Amenities & Facilities</h5>
           <div class="row g-2 mb-4">
             <div class="col-md-3 col-6">
               <div class="form-check form-switch">
@@ -122,14 +122,14 @@
           </div>
 
           <!-- Image Upload -->
-          <h5 class="fw-bold text-purple mb-3"><i class="fa-solid fa-images me-1"></i> Upload Property Photos</h5>
+          <h5 class="fw-bold text-navy mb-3"><i class="fa-solid fa-images me-1 text-pink" style="color: var(--primary-pink);"></i> Upload Property Photos</h5>
           <div class="mb-4">
-            <input name="listing[images]" type="file" class="form-control bg-dark border-secondary text-light" multiple />
+            <input name="listing[images]" type="file" class="form-control bg-light" multiple />
             <div class="form-text text-muted">Upload high-resolution images of rooms, washrooms, and study areas (up to 5 photos).</div>
           </div>
 
-          <div class="pt-3 border-top border-secondary">
-            <button class="btn btn-primary-gradient px-5 py-3 fw-bold"><i class="fa-solid fa-rocket me-2"></i> Publish Hostel Listing</button>
+          <div class="pt-3 border-top">
+            <button class="btn btn-pink-gradient px-5 py-3 fw-bold shadow"><i class="fa-solid fa-rocket me-2"></i> Publish Hostel Listing</button>
           </div>
         </form>
       </div>

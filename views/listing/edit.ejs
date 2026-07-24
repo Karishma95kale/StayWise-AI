@@ -3,28 +3,28 @@
 <div class="container my-5">
   <div class="row justify-content-center">
     <div class="col-lg-9 col-md-10">
-      <div class="glass-card p-4 p-md-5">
+      <div class="startup-card p-4 p-md-5">
         <div class="d-flex align-items-center gap-3 mb-4">
-          <div class="bg-gradient-primary rounded-3 p-3 text-white">
-            <i class="fa-solid fa-pen-to-square fs-3"></i>
+          <div class="rounded-circle p-3 text-white fs-3" style="background: var(--navy-gradient);">
+            <i class="fa-solid fa-pen-to-square"></i>
           </div>
           <div>
-            <h2 class="fw-bold mb-0">Edit Hostel: <%= listing.title %></h2>
+            <h2 class="fw-bold mb-0 text-navy">Edit Hostel: <%= listing.title %></h2>
             <p class="text-muted small mb-0">Update pricing, available beds, amenities, or upload new photos</p>
           </div>
         </div>
 
         <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
           <!-- Basic Info -->
-          <h5 class="fw-bold text-purple mb-3"><i class="fa-solid fa-info-circle me-1"></i> Basic Accommodation Info</h5>
+          <h5 class="fw-bold text-navy mb-3"><i class="fa-solid fa-info-circle me-1 text-pink" style="color: var(--primary-pink);"></i> Basic Accommodation Info</h5>
           <div class="row g-3 mb-4">
             <div class="col-md-8">
               <label for="title" class="form-label text-muted small fw-semibold">Hostel / Property Name</label>
-              <input name="listing[title]" value="<%= listing.title %>" type="text" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[title]" value="<%= listing.title %>" type="text" class="form-control bg-light" required />
             </div>
             <div class="col-md-4">
               <label for="gender" class="form-label text-muted small fw-semibold">Gender Policy</label>
-              <select name="listing[gender]" class="form-select bg-dark border-secondary text-light">
+              <select name="listing[gender]" class="form-select bg-light">
                 <option value="Co-ed" <%= listing.gender === 'Co-ed' ? 'selected' : '' %>>Co-ed</option>
                 <option value="Boys" <%= listing.gender === 'Boys' ? 'selected' : '' %>>Boys Only</option>
                 <option value="Girls" <%= listing.gender === 'Girls' ? 'selected' : '' %>>Girls Only</option>
@@ -33,29 +33,29 @@
 
             <div class="col-12">
               <label for="description" class="form-label text-muted small fw-semibold">Property Description & Rules</label>
-              <textarea name="listing[description]" rows="3" class="form-control bg-dark border-secondary text-light" required><%= listing.description %></textarea>
+              <textarea name="listing[description]" rows="3" class="form-control bg-light" required><%= listing.description %></textarea>
             </div>
           </div>
 
           <!-- Pricing & Capacity -->
-          <h5 class="fw-bold text-success mb-3"><i class="fa-solid fa-indian-rupee-sign me-1"></i> Pricing & Capacity</h5>
+          <h5 class="fw-bold text-navy mb-3"><i class="fa-solid fa-indian-rupee-sign me-1 text-success"></i> Pricing & Capacity</h5>
           <div class="row g-3 mb-4">
             <div class="col-md-4">
               <label for="price" class="form-label text-muted small fw-semibold">Monthly Rent (₹)</label>
-              <input name="listing[price]" value="<%= listing.price %>" type="number" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[price]" value="<%= listing.price %>" type="number" class="form-control bg-light" required />
             </div>
             <div class="col-md-4">
               <label for="securityDeposit" class="form-label text-muted small fw-semibold">Security Deposit (₹)</label>
-              <input name="listing[securityDeposit]" value="<%= listing.securityDeposit %>" type="number" class="form-control bg-dark border-secondary text-light" />
+              <input name="listing[securityDeposit]" value="<%= listing.securityDeposit %>" type="number" class="form-control bg-light" />
             </div>
             <div class="col-md-4">
               <label for="availableBeds" class="form-label text-muted small fw-semibold">Available Beds</label>
-              <input name="listing[availableBeds]" value="<%= listing.availableBeds %>" type="number" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[availableBeds]" value="<%= listing.availableBeds %>" type="number" class="form-control bg-light" required />
             </div>
 
             <div class="col-md-6">
               <label for="roomType" class="form-label text-muted small fw-semibold">Room Accommodation Type</label>
-              <select name="listing[roomType]" class="form-select bg-dark border-secondary text-light">
+              <select name="listing[roomType]" class="form-select bg-light">
                 <option value="Single" <%= listing.roomType === 'Single' ? 'selected' : '' %>>Single Room</option>
                 <option value="Double Sharing" <%= listing.roomType === 'Double Sharing' ? 'selected' : '' %>>Double Sharing</option>
                 <option value="Triple Sharing" <%= listing.roomType === 'Triple Sharing' ? 'selected' : '' %>>Triple Sharing</option>
@@ -66,47 +66,47 @@
 
             <div class="col-md-6">
               <label for="curfewTime" class="form-label text-muted small fw-semibold">Curfew Timing</label>
-              <input name="listing[curfewTime]" value="<%= listing.curfewTime %>" type="text" class="form-control bg-dark border-secondary text-light" />
+              <input name="listing[curfewTime]" value="<%= listing.curfewTime %>" type="text" class="form-control bg-light" />
             </div>
           </div>
 
           <!-- Location & Campus Proximity -->
-          <h5 class="fw-bold text-info mb-3"><i class="fa-solid fa-compass me-1"></i> College Proximity & Location</h5>
+          <h5 class="fw-bold text-navy mb-3"><i class="fa-solid fa-compass me-1 text-info"></i> College Proximity & Location</h5>
           <div class="row g-3 mb-4">
             <div class="col-md-7">
               <label for="college" class="form-label text-muted small fw-semibold">Nearby College / University</label>
-              <input name="listing[college]" value="<%= listing.college %>" type="text" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[college]" value="<%= listing.college %>" type="text" class="form-control bg-light" required />
             </div>
             <div class="col-md-5">
               <label for="distanceFromCollege" class="form-label text-muted small fw-semibold">Distance from Campus (km)</label>
-              <input name="listing[distanceFromCollege]" value="<%= listing.distanceFromCollege %>" type="number" step="0.1" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[distanceFromCollege]" value="<%= listing.distanceFromCollege %>" type="number" step="0.1" class="form-control bg-light" required />
             </div>
 
             <div class="col-md-8">
               <label for="location" class="form-label text-muted small fw-semibold">Full Address / Locality</label>
-              <input name="listing[location]" value="<%= listing.location %>" type="text" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[location]" value="<%= listing.location %>" type="text" class="form-control bg-light" required />
             </div>
             <div class="col-md-4">
               <label for="country" class="form-label text-muted small fw-semibold">Country</label>
-              <input name="listing[country]" value="<%= listing.country %>" type="text" class="form-control bg-dark border-secondary text-light" required />
+              <input name="listing[country]" value="<%= listing.country %>" type="text" class="form-control bg-light" required />
             </div>
           </div>
 
           <!-- Image Preview & Update -->
-          <h5 class="fw-bold text-purple mb-3"><i class="fa-solid fa-image me-1"></i> Current Cover Photo</h5>
+          <h5 class="fw-bold text-navy mb-3"><i class="fa-solid fa-image me-1 text-pink" style="color: var(--primary-pink);"></i> Current Cover Photo</h5>
           <div class="mb-4">
             <% if(originalImageUrl){ %>
               <div class="mb-3">
-                <img src="<%= originalImageUrl %>" class="rounded-3 shadow" style="height: 120px; object-fit: cover;" alt="Current Cover">
+                <img src="<%= originalImageUrl %>" class="rounded-3 shadow-sm" style="height: 120px; object-fit: cover;" alt="Current Cover">
               </div>
             <% } %>
             <label for="image" class="form-label text-muted small fw-semibold">Upload New Photos (Optional)</label>
-            <input name="listing[images]" type="file" class="form-control bg-dark border-secondary text-light" multiple />
+            <input name="listing[images]" type="file" class="form-control bg-light" multiple />
           </div>
 
-          <div class="pt-3 border-top border-secondary d-flex gap-3">
-            <button class="btn btn-primary-gradient px-5 py-3 fw-bold"><i class="fa-solid fa-floppy-disk me-2"></i> Save Changes</button>
-            <a href="/listings/<%= listing._id %>" class="btn btn-outline-glass px-4 py-3">Cancel</a>
+          <div class="pt-3 border-top d-flex gap-3">
+            <button class="btn btn-pink-gradient px-5 py-3 fw-bold shadow"><i class="fa-solid fa-floppy-disk me-2"></i> Save Changes</button>
+            <a href="/listings/<%= listing._id %>" class="btn btn-outline-navy px-4 py-3">Cancel</a>
           </div>
         </form>
       </div>

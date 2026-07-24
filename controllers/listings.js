@@ -16,19 +16,19 @@ module.exports.index = async (req, res) => {
     ];
   }
 
-  if (college && college !== "All") {
-    filter.college = new RegExp(college, "i");
+  if (college && college.trim() !== "" && college !== "All") {
+    filter.college = new RegExp(college.trim(), "i");
   }
 
-  if (maxPrice) {
+  if (maxPrice && maxPrice.toString().trim() !== "" && !isNaN(Number(maxPrice)) && Number(maxPrice) > 0) {
     filter.price = { $lte: Number(maxPrice) };
   }
 
-  if (gender && gender !== "All") {
+  if (gender && gender.trim() !== "" && gender !== "All") {
     filter.gender = gender;
   }
 
-  if (roomType && roomType !== "All") {
+  if (roomType && roomType.trim() !== "" && roomType !== "All") {
     filter.roomType = roomType;
   }
 
@@ -40,7 +40,7 @@ module.exports.index = async (req, res) => {
     filter.wifiAvailable = true;
   }
 
-  if (distance) {
+  if (distance && distance.toString().trim() !== "" && !isNaN(Number(distance)) && Number(distance) > 0) {
     filter.distanceFromCollege = { $lte: Number(distance) };
   }
 
