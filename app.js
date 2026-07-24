@@ -78,6 +78,8 @@ store.on("error", (err) => {
     console.log("Mongo Session Store Error", err);
 });
 
+const isProductionCloud = process.env.NODE_ENV === "production" && !dbUrl.includes("127.0.0.1") && !dbUrl.includes("localhost");
+
 const sessionOption = {
     store,
     secret: secret,
@@ -87,7 +89,7 @@ const sessionOption = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production" && process.env.RENDER_SERVICE_ID ? true : false,
+        secure: isProductionCloud,
         sameSite: "lax",
     },
 };
