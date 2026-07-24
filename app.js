@@ -53,8 +53,9 @@ const secret =
     process.env.SECRET || "mysupersecretcode";
 
 main()
-    .then(() => {
+    .then(async () => {
         console.log("✅ Connected to MongoDB");
+        await autoSeedIfEmpty();
     })
     .catch((err) => {
         console.log(err);
@@ -62,6 +63,66 @@ main()
 
 async function main() {
     await mongoose.connect(dbUrl);
+}
+
+async function autoSeedIfEmpty() {
+    try {
+        const count = await Listing.countDocuments();
+        if (count === 0) {
+            console.log("🌱 Database is empty. Auto-seeding StayWise AI hostels & demo accounts...");
+            const initData = require("./init/data.js");
+            
+            let owner = await User.findOne({ username: "hostelowner" });
+            if (!owner) {
+                const ownerUser = new User({
+                    username: "hostelowner",
+                    email: "owner@staywise.ai",
+                    role: "owner",
+                    phone: "9876543210",
+                    collegeName: "Delhi University",
+                    isVerified: true
+                });
+                owner = await User.register(ownerUser, "owner123");
+            }
+            
+            let student = await User.findOne({ username: "student" });
+            if (!student) {
+                const studentUser = new User({
+                    username: "student",
+                    email: "student@staywise.ai",
+                    role: "student",
+                    phone: "9123456789",
+                    collegeName: "Delhi University North Campus",
+                    budget: 12000,
+                    gender: "Boys",
+                    isVerified: true
+                });
+                await User.register(studentUser, "student123");
+            }
+
+            let admin = await User.findOne({ username: "admin" });
+            if (!admin) {
+                const adminUser = new User({
+                    username: "admin",
+                    email: "admin@staywise.ai",
+                    role: "admin",
+                    phone: "9999999999",
+                    isVerified: true
+                });
+                await User.register(adminUser, "admin123");
+            }
+
+            const hostels = initData.data.map((obj) => ({
+                ...obj,
+                owner: owner._id
+            }));
+
+            await Listing.insertMany(hostels);
+            console.log(`✅ Automatically seeded ${hostels.length} hostels into DB!`);
+        }
+    } catch (err) {
+        console.log("Auto-seed notice:", err.message);
+    }
 }
 
 /* ================= SESSION ================= */
